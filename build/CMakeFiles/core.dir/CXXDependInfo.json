@@ -1,0 +1,35 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "GNU",
+	"compiler-simulate-id" : "",
+	"config" : "Debug",
+	"cxx-modules" : {},
+	"database-info" : null,
+	"dir-cur-bld" : "/home/louis/CLionProjects/AudioDSP/build",
+	"dir-cur-src" : "/home/louis/CLionProjects/AudioDSP",
+	"dir-top-bld" : "/home/louis/CLionProjects/AudioDSP/build",
+	"dir-top-src" : "/home/louis/CLionProjects/AudioDSP",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"/home/louis/CLionProjects/AudioDSP/include"
+	],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "/home/louis/CLionProjects/AudioDSP/build/CMakeFiles/core.dir",
+	"sources" : 
+	{
+		"CMakeFiles/core.dir/src/SinGenerator.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/home/louis/CLionProjects/AudioDSP/src/SinGenerator.cpp"
+		},
+		"CMakeFiles/core.dir/src/add.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/home/louis/CLionProjects/AudioDSP/src/add.cpp"
+		}
+	}
+}
