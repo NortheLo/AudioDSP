@@ -1,5 +1,0 @@
-if(EXISTS "/home/louis/CLionProjects/AudioDSP/build/Catch_tests/Catch_tests_run-b12d07c_tests.cmake")
-  include("/home/louis/CLionProjects/AudioDSP/build/Catch_tests/Catch_tests_run-b12d07c_tests.cmake")
-else()
-  add_test(Catch_tests_run_NOT_BUILT-b12d07c Catch_tests_run_NOT_BUILT-b12d07c)
-endif()
