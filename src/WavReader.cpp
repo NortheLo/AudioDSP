@@ -8,6 +8,8 @@
 
 #include "WavReader.h"
 
+#include <cstring>
+
 template<typename SampleType>
 void WavReader<SampleType>::setFileSize() {
     fileSize = std::filesystem::file_size(pathWav);
@@ -19,15 +21,58 @@ void WavReader<SampleType>::setFileSize() {
 template<typename SampleType>
 void WavReader<SampleType>::readHeader(std::ifstream& file) {
     file.seekg(0, std::ios::beg);
-    file.read(reinterpret_cast<char*>(&header), headerSize);
+
+    char chunkId[4];
+    uint32_t chunkSize;
+
+    // Read RIFF header
+    file.read(chunkId, 4); // "RIFF"
+    if (std::memcmp(chunkId, "RIFF", 4) != 0) throw std::runtime_error("Not a RIFF file");
+
+    file.read(reinterpret_cast<char*>(&header.fileSize), sizeof(uint32_t));
+
+    file.read(chunkId, 4); // "WAVE"
+    if (std::memcmp(chunkId, "WAVE", 4) != 0) throw std::runtime_error("Not a WAVE file");
+
+    // Look for the "fmt " chunk
+    while (file.read(chunkId, 4)) {
+        file.read(reinterpret_cast<char*>(&chunkSize), sizeof(uint32_t));
+
+        if (std::memcmp(chunkId, "fmt ", 4) == 0) {
+            // Read the rest of the fmt chunk
+            file.read(reinterpret_cast<char*>(&header.audioFormat), 16); // assuming standard fmt chunk size
+            break;
+        } else {
+            file.seekg(chunkSize, std::ios::cur); // skip unknown chunk
+        }
+    }
+
+    // Look for the "data" chunk
+    while (file.read(chunkId, 4)) {
+        file.read(reinterpret_cast<char*>(&chunkSize), sizeof(uint32_t));
+
+        if (std::memcmp(chunkId, "data", 4) == 0) {
+            header.dataSize = chunkSize;
+            break;
+        } else {
+            file.seekg(chunkSize, std::ios::cur); // skip fact, PEAK, etc.
+        }
+    }
+
+    // Store current position (start of data)
+    startPositionData = file.tellg();
+
+    // Print for debug
     std::cout << "Audio Format:\t" << header.audioFormat <<
-                "\nSample Rate:\t" << header.samplingRate <<
-                    "\nChannels:\t" << header.channels << "\n";
+                 "\nSample Rate:\t" << header.samplingRate <<
+                 "\nChannels:\t" << header.channels <<
+                 "\nData Size:\t" << header.dataSize << "\n";
 }
+
 
 template<typename SampleType>
 int WavReader<SampleType>::getNumberSamples(unsigned int fileSize) {
-    std::div_t numberSamples = std::div((int) (fileSize - headerSize), (int) sizeof(SampleType));
+    std::div_t numberSamples = std::div((int) (fileSize - startPositionData), (int) sizeof(SampleType));
     if (numberSamples.rem != 0) {
         std::cerr << "Incomplete number of samples. Aborting..." << std::endl;
         return 0;
@@ -48,9 +93,9 @@ std::vector<SampleType> WavReader<SampleType>::getSamples() {
     }
 
     audioData.resize(numberSamples);
-    file.seekg(headerSize, std::ios::beg);  // Skip header data
+    file.seekg(startPositionData, std::ios::beg);  // Skip header data
 
-    if (file.tellg() != headerSize) {
+    if (startPositionData > fileSize) {
         std::cerr << "Seek operation failed!" << std::endl;
         return audioData;
     }

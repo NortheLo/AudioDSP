@@ -38,5 +38,5 @@ private:
         wavHeader header;
         unsigned int headerSize = sizeof(wavHeader);
         unsigned int fileSize;
-
+        unsigned int startPositionData; // in bytes
 };

@@ -9,12 +9,6 @@
 
 #include "WavReader.h"
 
-TEST_CASE("Test_SetFileSize") {
-    /*
-     * We have to find a Mocking Framework (e.g. FakeIT)
-     */
-}
-
 TEST_CASE("Number_of_Samples") {
     std::filesystem::path pathToWav = std::filesystem::path(TEST_DATA_DIR) / "test_f32_chirp.wav";
 
@@ -42,5 +36,16 @@ TEST_CASE("Read_WAV_Samples") {
     REQUIRE(samples.size() == 2000000);
 
     REQUIRE(samples[0] == 0);
-    REQUIRE(samples[1] == 0.0626482964);
+    REQUIRE(samples[1] == 0.0626482964f);
+}
+
+TEST_CASE("Read_WAV_Samples2") {
+    std::filesystem::path pathToWav = std::filesystem::path(TEST_DATA_DIR) / "test_f32_sin_440Hz.wav";
+    auto rdr = WavReader<float>(pathToWav);
+
+    std::vector<float> samples = rdr.getSamples();
+    REQUIRE(samples.size() == 100000);
+    /*
+     *  We need now to compare the exact float values
+    */
 }
