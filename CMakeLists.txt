@@ -26,3 +26,4 @@ target_link_libraries(AudioDSP PRIVATE core)
 
 # Add tests
 add_subdirectory(Catch_tests)
+

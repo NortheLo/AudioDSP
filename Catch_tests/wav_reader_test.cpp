@@ -5,6 +5,7 @@
 #include <vector>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_all.hpp>
+#include <catch/fakeit.hpp>
 
 #include "WavReader.h"
 
@@ -15,8 +16,7 @@ TEST_CASE("Test_SetFileSize") {
 }
 
 TEST_CASE("Number_of_Samples") {
-    // Path to your WAV file for testing
-    std::filesystem::path pathToWav("/home/louis/CLionProjects/AudioDSP/Catch_tests/Data/test_f32_chirp.wav");
+    std::filesystem::path pathToWav = std::filesystem::path(TEST_DATA_DIR) / "test_f32_chirp.wav";
 
     class Test_WavReader : public WavReader<float> {
     public:
@@ -35,7 +35,7 @@ TEST_CASE("Number_of_Samples") {
 }
 
 TEST_CASE("Read_WAV_Samples") {
-    std::filesystem::path pathToWav("/home/louis/CLionProjects/AudioDSP/Catch_tests/Data/test_f32_chirp.wav");
+    std::filesystem::path pathToWav = std::filesystem::path(TEST_DATA_DIR) / "test_f32_chirp.wav";
     auto rdr = WavReader<float>(pathToWav);
 
     std::vector<float> samples = rdr.getSamples();
