@@ -28,6 +28,7 @@ TEST_CASE("Number_of_Samples") {
     REQUIRE(res == expectedNumSamples);
 }
 
+/* This test contains a chirp from audacity */
 TEST_CASE("Read_WAV_Samples") {
     std::filesystem::path pathToWav = std::filesystem::path(TEST_DATA_DIR) / "test_f32_chirp.wav";
     auto rdr = WavReader<float>(pathToWav);
@@ -37,15 +38,20 @@ TEST_CASE("Read_WAV_Samples") {
 
     REQUIRE(samples[0] == 0);
     REQUIRE(samples[1] == 0.0626482964f);
+    REQUIRE(samples[100] == Catch::Approx(-0.01393619459122419));
+    REQUIRE(samples[2000000 -1] == Catch::Approx(0.09989974647760391));
 }
 
+/* This file reads a 440Hz sin from MATLAB */
 TEST_CASE("Read_WAV_Samples2") {
     std::filesystem::path pathToWav = std::filesystem::path(TEST_DATA_DIR) / "test_f32_sin_440Hz.wav";
     auto rdr = WavReader<float>(pathToWav);
 
     std::vector<float> samples = rdr.getSamples();
-    REQUIRE(samples.size() == 100000);
-    /*
-     *  We need now to compare the exact float values
-    */
+    REQUIRE(samples.size() == 1000);
+    REQUIRE(samples[0] == 0.f);
+    REQUIRE(samples[1] == 0.06264832615852356);
+    REQUIRE(samples[2] == 0.12505053f);
+    REQUIRE(samples[175] == -0.9996891617774963);
+    REQUIRE(samples[999] == Catch::Approx(-0.2037289291620255));
 }

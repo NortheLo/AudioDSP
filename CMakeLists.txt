@@ -12,6 +12,8 @@ add_library(core STATIC
         include/WavReader.h
         src/WavReader.cpp
         include/WavHeader.h
+        include/NoiseGenerator.h
+        src/NoiseGenerator.cpp
 )
 
 # Make headers visible to anything linking to this library
@@ -21,7 +23,8 @@ target_include_directories(core PUBLIC ${CMAKE_SOURCE_DIR}/include)
 add_executable(AudioDSP main.cpp
         include/WavReader.h
         src/WavReader.cpp
-        include/WavHeader.h)
+        include/WavHeader.h
+        src/NoiseGenerator.cpp)
 target_link_libraries(AudioDSP PRIVATE core)
 
 # Add tests
