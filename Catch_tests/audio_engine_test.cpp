@@ -25,4 +25,9 @@ TEST_CASE("Process_Sin_w_Offset") {
 
     REQUIRE(res.size() == nSamples);
     REQUIRE(res[0] == 1.f);
+
+    // all test values from sin test just + 1
+    REQUIRE(res[1] == Catch::Approx(0.125296652 + 1.f));
+    REQUIRE(res[28] == Catch::Approx(1.96605396270751953 + 1.f));
+    REQUIRE(res[75] == Catch::Approx(-1.9998858 + 1.f));
 }
