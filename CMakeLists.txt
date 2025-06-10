@@ -14,6 +14,9 @@ add_library(core STATIC
         include/WavHeader.h
         include/NoiseGenerator.h
         src/NoiseGenerator.cpp
+        src/AudioEngine.cpp
+        include/AudioEngine.h
+        include/IDSPProcessor.h
 )
 
 # Make headers visible to anything linking to this library
@@ -24,7 +27,10 @@ add_executable(AudioDSP main.cpp
         include/WavReader.h
         src/WavReader.cpp
         include/WavHeader.h
-        src/NoiseGenerator.cpp)
+        src/NoiseGenerator.cpp
+        src/AudioEngine.cpp
+        include/AudioEngine.h
+        include/IDSPProcessor.h)
 target_link_libraries(AudioDSP PRIVATE core)
 
 # Add tests

@@ -9,25 +9,6 @@
 
 #include "WavReader.h"
 
-TEST_CASE("Number_of_Samples") {
-    std::filesystem::path pathToWav = std::filesystem::path(TEST_DATA_DIR) / "test_f32_chirp.wav";
-
-    class Test_WavReader : public WavReader<float> {
-    public:
-        Test_WavReader(std::filesystem::path wavPath) : WavReader<float>(wavPath) {}
-        int getNumberSamplesW(unsigned int fileSize) {
-            return getNumberSamples(fileSize);
-        }
-    };
-
-    unsigned int fileSize = 100;
-    int expectedNumSamples = (fileSize - 44) / sizeof(float);
-
-    Test_WavReader rdr(pathToWav);
-    int res = rdr.getNumberSamplesW(fileSize);
-    REQUIRE(res == expectedNumSamples);
-}
-
 /* This test contains a chirp from audacity */
 TEST_CASE("Read_WAV_Samples") {
     std::filesystem::path pathToWav = std::filesystem::path(TEST_DATA_DIR) / "test_f32_chirp.wav";

@@ -15,7 +15,7 @@ public:
     virtual std::vector<SampleType> getSamples() = 0;
 
     void setSampleRate(unsigned int rate) { sampleRate = rate; }
-
+    size_t getBufferSize() { return bufferSize; }
     unsigned int getSampleRate() { return sampleRate; }
 protected:
     size_t bufferSize;

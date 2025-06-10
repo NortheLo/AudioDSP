@@ -39,9 +39,9 @@ TEST_CASE("Add_AWGN_to_Signal") {
     float ref_mean = 0.f;
     float stddev = 0.5f;
     NoiseGenerator<float> cut = NoiseGenerator<float>(nSamples, ref_mean, stddev);
-    std::vector<float> res = cut.getSamples();
 
     std::vector<float> signal(nSamples, 1.f);
+    std::vector<float> res = cut.addNoise(signal);
 
     REQUIRE(res.size() == 1000);
 
@@ -49,6 +49,7 @@ TEST_CASE("Add_AWGN_to_Signal") {
     double sum_sq = 0.0;
     for (float x : res) {
         REQUIRE(std::isfinite(x));  // No NaNs or infinities
+        REQUIRE(x != 1.f);
         sum += x;
         sum_sq += x * x;
     }
