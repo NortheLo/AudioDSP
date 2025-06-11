@@ -9,6 +9,7 @@
 
 #include "IDSPProcessor.h"
 #include "IAudioSource.h"
+#include "IAudioSink.h"
 
 template<typename SampleType>
 class AudioEngine {
@@ -21,11 +22,16 @@ public:
         processors_.push_back(processor);
     }
 
+    void setSink(std::shared_ptr<IAudioSink<SampleType>> sink) {
+        sink_.push_back(sink);
+    }
+
     void processNextBlock(SampleType* outputBuffer);
 
 
 private:
     std::shared_ptr<IAudioSource<SampleType>> source_;
     std::vector<std::shared_ptr<IDSPProcessor<SampleType>>> processors_;
+    std::vector<std::shared_ptr<IAudioSink<SampleType>>> sink_;
     std::vector<SampleType> tempBuffer_;
 };

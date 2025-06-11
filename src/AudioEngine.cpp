@@ -28,6 +28,11 @@ void AudioEngine<SampleType>::processNextBlock(SampleType* outputBuffer) {
         inputBuffer = tempBuffer_;  // chain output to next processor input
     }
 
+    // update all sinks e.g. GUIs, plotting function etc
+    for (auto& sink : sink_) {
+        sink->update(tempBuffer_.data(), source_->getBufferSize());
+    }
+
     std::copy_n(tempBuffer_.begin(), source_->getBufferSize(), outputBuffer);
 }
 

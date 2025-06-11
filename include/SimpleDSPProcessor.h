@@ -14,5 +14,4 @@ template<typename SampleType>
 class SimpleDSPProcessor : public IDSPProcessor<SampleType> {
 public:
     void process(const SampleType* input, SampleType* output, size_t numSamples) override;
-
 };
