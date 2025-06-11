@@ -8,6 +8,7 @@ add_executable(Catch_tests_run add_test.cpp
         ../src/AudioEngine.cpp
         ../src/SimpleDSPProcessor.cpp
         audio_engine_test.cpp
+        simple_plot_test.cpp
 )
 
 target_link_libraries(Catch_tests_run PRIVATE Catch2::Catch2WithMain core)

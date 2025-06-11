@@ -7,6 +7,8 @@
   <component name="CidrRootsConfiguration">
     <libraryRoots>
       <file path="$PROJECT_DIR$/external/FakeIt" />
+      <file path="$PROJECT_DIR$/external/imgui" />
+      <file path="$PROJECT_DIR$/external/implot" />
     </libraryRoots>
   </component>
 </project>

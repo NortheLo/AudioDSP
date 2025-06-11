@@ -8,5 +8,5 @@ template<typename SampleType>
 class IAudioSink {
     public:
         virtual ~IAudioSink() = default;
-        virtual void update(const SampleType*, size_t numSamples);
+        virtual void update(const SampleType*, size_t numSamples) = 0;
 };
