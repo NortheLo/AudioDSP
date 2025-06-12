@@ -10,6 +10,13 @@ To achieve this, this Framework needs:
 ## Installation
 ### Dependencies on Fedora
 On Fedora install Catch2 with ``sudo dnf install catch2-devel``
-<br> **Note:** Don`t use the catch2-devel-xxx.x86_64 rpm's. They provide an older version.
+<br> **Note Fedora 42:** Don`t use the catch2-devel-xxx.x86_64 rpm's. They provide an older version.
 ### Dependencies on macOS
 Install catch2 via homebrew.
+
+## To-Do
+- Abstract GLFW stuff into one handler
+- Seperate into Audio and Plot Thread 
+- Make portaudio input and output class
+- create fft dsp processor
+- create GUI with input plot, output, select source/sink
