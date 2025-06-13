@@ -11,8 +11,7 @@
 #include "IAudioSource.h"
 #include "WavHeader.h"
 
-template<typename SampleType>
-
+template<typename SampleType, size_t BufferSize>
 class WavReader{
 public:
         WavReader(const std::filesystem::path path) {
@@ -22,16 +21,19 @@ public:
                 } else {
                         std::cerr << "File is invalid or doesn't exist.\n";
                 }
+
+                loadAllSamples();
         };
         void setSampleRate(unsigned int rate) { };
-        unsigned int getSampleRate() { return (unsigned int) header.dataSize; }
+        unsigned int getSampleRate() { return (unsigned int) header.samplingRate; }
 
-        std::vector<SampleType> getSamples();
+        void getSamples(std::array<SampleType, BufferSize>& buffer);
 
 protected:
         void readHeader(std::ifstream& file);
         void setFileSize();
         int getNumberSamples(unsigned int filesize);
+        void loadAllSamples();
 
 private:
         std::filesystem::path pathWav;
@@ -39,4 +41,7 @@ private:
         unsigned int headerSize = sizeof(wavHeader);
         unsigned int fileSize;
         unsigned int startPositionData; // in bytes
+
+        size_t lastIdx = 0;
+        std::vector<SampleType> allSamples;
 };

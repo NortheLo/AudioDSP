@@ -11,8 +11,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Create a library from your core code
 add_library(core STATIC
-        src/add.cpp
-        include/add.h
         include/SinGenerator.h
         src/SinGenerator.cpp
         include/WavReader.h

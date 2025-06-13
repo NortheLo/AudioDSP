@@ -5,23 +5,23 @@
 #include <cmath>
 
 #include "SinGenerator.h"
+#include "SupportedFormats.h"
 
-template<typename SampleType>
-
-std::vector<SampleType> SinGenerator<SampleType>::getSamples() {
-    std::vector<SampleType> samples(this->bufferSize);
+template<typename SampleType, size_t BufferSize>
+void SinGenerator<SampleType, BufferSize>::getSamples(std::array<SampleType, BufferSize>& buffer) {
     const double omega = 2.0 * M_PI * this->_frequency;
     const double deltaT = 1.0 / static_cast<double>(this->sampleRate);
 
-    for (size_t i = 0; i < this->bufferSize; ++i) {
+    for (size_t i = 0; i < BufferSize; ++i) {
         double t = static_cast<double>(i) * deltaT;
-        samples[i] = static_cast<SampleType>(this->_amplitude * std::sin(omega * t));
+        buffer[i] = static_cast<SampleType>(this->_amplitude * std::sin(omega * t));
     }
-
-    return samples;
 }
 
-template class SinGenerator<float>;
-template class SinGenerator<double>;
-template class SinGenerator<uint16_t>;
-template class SinGenerator<uint32_t>;
+template class SinGenerator<float, BUFFERSIZE_64>;
+template class SinGenerator<float, BUFFERSIZE_128>;
+template class SinGenerator<float, BUFFERSIZE_256>;
+
+template class SinGenerator<uint32_t, BUFFERSIZE_64>;
+template class SinGenerator<uint32_t, BUFFERSIZE_128>;
+template class SinGenerator<uint32_t, BUFFERSIZE_256>;

@@ -5,21 +5,22 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
+#include <cstring>
+#include <algorithm>
 
 #include "WavReader.h"
+#include "SupportedFormats.h"
 
-#include <cstring>
-
-template<typename SampleType>
-void WavReader<SampleType>::setFileSize() {
+template<typename SampleType, size_t BufferSize>
+void WavReader<SampleType, BufferSize>::setFileSize() {
     fileSize = std::filesystem::file_size(pathWav);
     if (fileSize < headerSize) {
         std::cerr << "File too small to be .wav" << std::endl;
     }
 }
 
-template<typename SampleType>
-void WavReader<SampleType>::readHeader(std::ifstream& file) {
+template<typename SampleType, size_t BufferSize>
+void WavReader<SampleType, BufferSize>::readHeader(std::ifstream& file) {
     file.seekg(0, std::ios::beg);
 
     char chunkId[4];
@@ -70,9 +71,9 @@ void WavReader<SampleType>::readHeader(std::ifstream& file) {
 }
 
 
-template<typename SampleType>
-int WavReader<SampleType>::getNumberSamples(unsigned int fileSize) {
-    std::div_t numberSamples = std::div((int) (fileSize - startPositionData), (int) sizeof(SampleType));
+template<typename SampleType, size_t BufferSize>
+int WavReader<SampleType, BufferSize>::getNumberSamples(unsigned int fileSize) {
+    std::div_t numberSamples = std::div(static_cast<int>(fileSize - startPositionData), static_cast<int>(sizeof(SampleType)));
     if (numberSamples.rem != 0) {
         std::cerr << "Incomplete number of samples. Aborting..." << std::endl;
         return 0;
@@ -80,32 +81,43 @@ int WavReader<SampleType>::getNumberSamples(unsigned int fileSize) {
     return numberSamples.quot;
 }
 
-template<typename SampleType>
-std::vector<SampleType> WavReader<SampleType>::getSamples() {
+template<typename SampleType, size_t BufferSize>
+void WavReader<SampleType, BufferSize>::getSamples(std::array<SampleType, BufferSize>& buffer) {
+    size_t remaining = (lastIdx < allSamples.size()) ? (allSamples.size() - lastIdx) : 0;
+    size_t toCopy = (remaining > BufferSize) ? BufferSize : remaining;
+
+    std::copy_n(allSamples.begin() + lastIdx, toCopy, buffer.begin());
+    std::fill(buffer.begin() + toCopy, buffer.end(), SampleType{0});
+
+    lastIdx += toCopy;
+}
+
+
+template <typename SampleType, size_t BufferSize>
+void WavReader<SampleType, BufferSize>::loadAllSamples() {
     std::ifstream file(pathWav, std::ios::binary);
 
     readHeader(file);
 
-    std::vector<SampleType> audioData;
     int numberSamples = getNumberSamples(fileSize);
     if (numberSamples == 0) {
-        return audioData;
+        std::cerr << "No samples to load!" << std::endl;
     }
 
-    audioData.resize(numberSamples);
+    allSamples.resize(numberSamples);
     file.seekg(startPositionData, std::ios::beg);  // Skip header data
 
     if (startPositionData > fileSize) {
         std::cerr << "Seek operation failed!" << std::endl;
-        return audioData;
     }
 
     // Read only the actual audio data (not including the header)
-    file.read(reinterpret_cast<char *>(audioData.data()), numberSamples * sizeof(SampleType));
+    file.read(reinterpret_cast<char *>(allSamples.data()), numberSamples * sizeof(SampleType));
 
     std::cout << fileSize << " Bytes loaded from " << pathWav.string() << std::endl;
-    return audioData;
 }
 
-/* Right now only floats are supported */
-template class WavReader<float>;
+
+template class WavReader<float, BUFFERSIZE_64>;
+template class WavReader<float, BUFFERSIZE_128>;
+template class WavReader<float, BUFFERSIZE_256>;

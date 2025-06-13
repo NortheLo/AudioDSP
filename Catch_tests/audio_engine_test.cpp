@@ -7,23 +7,23 @@
 #include "AudioEngine.h"
 #include "SimpleDSPProcessor.h"
 #include "SinGenerator.h"
+#include "SupportedFormats.h"
 
 TEST_CASE("Process_Sin_w_Offset") {
-    AudioEngine<float> engine;
+    AudioEngine<float, BUFFERSIZE_128> engine;
 
     float ampl = 2.f;
     float freq = 440.f;
-    size_t nSamples = 1e3;
-    auto sinGen = std::make_shared<SinGenerator<float>>(ampl, freq, nSamples);
+    auto sinGen = std::make_shared<SinGenerator<float, BUFFERSIZE_128>>(ampl, freq);
 
     auto processor = std::make_shared<SimpleDSPProcessor<float>>();
 
-    std::vector<float> res(nSamples);
+    std::array<float, BUFFERSIZE_128> res{};
     engine.setSource(sinGen);
     engine.addProcessor(processor);
     engine.processNextBlock(res.data());
 
-    REQUIRE(res.size() == nSamples);
+    REQUIRE(res.size() == BUFFERSIZE_128);
     REQUIRE(res[0] == 1.f);
 
     // all test values from sin test just + 1
@@ -33,24 +33,23 @@ TEST_CASE("Process_Sin_w_Offset") {
 }
 
 TEST_CASE("Process_Two_Modules") {
-    AudioEngine<float> engine;
+    AudioEngine<float, BUFFERSIZE_128> engine;
 
     float ampl = 2.f;
     float freq = 440.f;
-    size_t nSamples = 1e3;
-    auto sinGen = std::make_shared<SinGenerator<float>>(ampl, freq, nSamples);
+    auto sinGen = std::make_shared<SinGenerator<float, BUFFERSIZE_128>>(ampl, freq);
 
     auto processor = std::make_shared<SimpleDSPProcessor<float>>();
     auto secondprocessor = std::make_shared<SimpleDSPProcessor<float>>();
 
 
-    std::vector<float> res(nSamples);
+    std::array<float, BUFFERSIZE_128> res{};
     engine.setSource(sinGen);
     engine.addProcessor(processor);
     engine.addProcessor(secondprocessor);
     engine.processNextBlock(res.data());
 
-    REQUIRE(res.size() == nSamples);
+    REQUIRE(res.size() == BUFFERSIZE_128);
     REQUIRE(res[0] == 2.f);
 
     // all test values from sin test just + 1
@@ -61,14 +60,13 @@ TEST_CASE("Process_Two_Modules") {
 
 
 TEST_CASE("Process_wo_Processor") {
-    AudioEngine<float> engine;
+    AudioEngine<float, BUFFERSIZE_128> engine;
 
-    size_t nSamples = 1e3;
-    auto sinGen = std::make_shared<SinGenerator<float>>(2.f, 440.f, nSamples);
+    auto sinGen = std::make_shared<SinGenerator<float, BUFFERSIZE_128>>(2.f, 440.f);
 
     auto processor = std::make_shared<SimpleDSPProcessor<float>>();
 
-    std::vector<float> res(nSamples);
+    std::array<float, BUFFERSIZE_128> res{};
     engine.setSource(sinGen);
     engine.processNextBlock(res.data());
 
@@ -80,7 +78,7 @@ TEST_CASE("Process_wo_Processor") {
     engine.processNextBlock(res.data());
 
 
-    REQUIRE(res.size() == nSamples);
+    REQUIRE(res.size() == BUFFERSIZE_128);
     REQUIRE(res[0] == 1.f);
 
     // all test values from sin test just + 1

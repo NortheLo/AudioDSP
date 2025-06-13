@@ -11,10 +11,10 @@
 #include "IAudioSource.h"
 #include "IAudioSink.h"
 
-template<typename SampleType>
+template<typename SampleType, size_t BufferSize>
 class AudioEngine {
 public:
-    void setSource(std::shared_ptr<IAudioSource<SampleType>> source) {
+    void setSource(std::shared_ptr<IAudioSource<SampleType, BufferSize>> source) {
         source_ = source;
     }
 
@@ -30,8 +30,10 @@ public:
 
 
 private:
-    std::shared_ptr<IAudioSource<SampleType>> source_;
+    std::shared_ptr<IAudioSource<SampleType, BufferSize>> source_;
     std::vector<std::shared_ptr<IDSPProcessor<SampleType>>> processors_;
     std::vector<std::shared_ptr<IAudioSink<SampleType>>> sink_;
-    std::vector<SampleType> tempBuffer_;
+
+    std::array<SampleType, BufferSize> frontBuffer;
+    std::array<SampleType, BufferSize> backBuffer;
 };

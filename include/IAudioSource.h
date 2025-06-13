@@ -3,21 +3,20 @@
 //
 
 #pragma once
-#include <vector>
+#include <array>
 
-template<typename SampleType>
+template<typename SampleType, size_t BufferSize>
 
 class IAudioSource {
 public:
-    IAudioSource(size_t bufferSize) : bufferSize(bufferSize) { };
+    IAudioSource() = default;
     virtual ~IAudioSource() = default;
 
-    virtual std::vector<SampleType> getSamples() = 0;
+    virtual void getSamples(std::array<SampleType, BufferSize>& buffer) = 0;
 
     void setSampleRate(unsigned int rate) { sampleRate = rate; }
-    size_t getBufferSize() { return bufferSize; }
+    size_t getBufferSize() { return BufferSize; }
     unsigned int getSampleRate() { return sampleRate; }
 protected:
-    size_t bufferSize;
     unsigned int sampleRate = 44100;
 };

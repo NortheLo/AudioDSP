@@ -5,15 +5,16 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/catch_all.hpp>
 #include "NoiseGenerator.h"
+#include "SupportedFormats.h"
 
 TEST_CASE("Test_Samples") {
-    size_t nSamples = 1000;
     float ref_mean = 0.f;
     float stddev = 0.5f;
-    NoiseGenerator<float> cut = NoiseGenerator<float>(nSamples, ref_mean, stddev);
-    std::vector<float> res = cut.getSamples();
+    auto cut = NoiseGenerator<float, BUFFERSIZE_256>(ref_mean, stddev);
+    std::array<float, BUFFERSIZE_256> res{};
+    cut.getSamples(res);
 
-    REQUIRE(res.size() == 1000);
+    REQUIRE(res.size() == BUFFERSIZE_256);
 
     double sum = 0.0;
     double sum_sq = 0.0;
@@ -23,8 +24,8 @@ TEST_CASE("Test_Samples") {
         sum_sq += x * x;
     }
 
-    double mean = sum / nSamples;
-    double variance = (sum_sq / nSamples) - (mean * mean);
+    double mean = sum / BUFFERSIZE_256;
+    double variance = (sum_sq / BUFFERSIZE_256) - (mean * mean);
     double computed_stddev = std::sqrt(variance);
 
     REQUIRE(mean < 0.2);  // Mean should be ~0
@@ -35,15 +36,15 @@ TEST_CASE("Test_Samples") {
 }
 
 TEST_CASE("Add_AWGN_to_Signal") {
-    size_t nSamples = 1000;
     float ref_mean = 0.f;
     float stddev = 0.5f;
-    NoiseGenerator<float> cut = NoiseGenerator<float>(nSamples, ref_mean, stddev);
+    auto cut = NoiseGenerator<float, BUFFERSIZE_256>(ref_mean, stddev);
 
-    std::vector<float> signal(nSamples, 1.f);
-    std::vector<float> res = cut.addNoise(signal);
+    std::array<float, BUFFERSIZE_256> res{};
+    res.fill(1.f);
+    cut.addNoise(res);
 
-    REQUIRE(res.size() == 1000);
+    REQUIRE(res.size() == BUFFERSIZE_256);
 
     double sum = 0.0;
     double sum_sq = 0.0;
@@ -54,12 +55,12 @@ TEST_CASE("Add_AWGN_to_Signal") {
         sum_sq += x * x;
     }
 
-    double mean = sum / nSamples;
-    double variance = (sum_sq / nSamples) - (mean * mean);
+    double mean = sum / BUFFERSIZE_256;
+    double variance = (sum_sq / BUFFERSIZE_256) - (mean * mean);
     double computed_stddev = std::sqrt(variance);
 
-    REQUIRE(mean < 1.2);  // Mean should be ~0
-    REQUIRE(mean > 0.8);  // Mean should be ~0
+    REQUIRE(mean < 1.2);
+    REQUIRE(mean > 0.8);
 
     REQUIRE(computed_stddev > 0.45);  // Stddev within tolerance
     REQUIRE(computed_stddev < 0.55);

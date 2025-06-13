@@ -2,6 +2,7 @@
 #include "SinGenerator.h"
 #include "SimplePlot.h"
 #include "SimpleDSPProcessor.h"
+#include <SupportedFormats.h>
 
 #include "imgui.h"
 #include "implot.h"
@@ -38,14 +39,13 @@ int main() {
     ImGui_ImplOpenGL3_Init("#version 130");
 
     // Your audio code
-    AudioEngine<float> engine;
+    AudioEngine<float, BUFFERSIZE_128> engine;
     float ampl = 2.f;
     float freq = 440.f;
-    size_t nSamples = 512;
-    auto sinGen = std::make_shared<SinGenerator<float>>(ampl, freq, nSamples);
-    auto plot = std::make_shared<SimplePlot<float>>(nSamples);
+    auto sinGen = std::make_shared<SinGenerator<float, BUFFERSIZE_128>>(ampl, freq);
+    auto plot = std::make_shared<SimplePlot<float>>(BUFFERSIZE_128);
     auto proc = std::make_shared<SimpleDSPProcessor<float>>();
-    std::vector<float> res(nSamples);
+    std::array<float, BUFFERSIZE_128> res{};
     engine.setSource(sinGen);
     engine.setSink(plot);
     engine.addProcessor(proc);

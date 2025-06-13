@@ -6,15 +6,14 @@
 
 #include "IAudioSource.h"
 
-template<typename SampleType>
-
-class NoiseGenerator : public IAudioSource<SampleType> {
+template<typename SampleType, size_t BufferSize>
+class NoiseGenerator : public IAudioSource<SampleType, BufferSize> {
 public:
-    NoiseGenerator(const size_t nSamples, const float mean = 0.f, const float stdDev = 1.f) :
-                    IAudioSource<SampleType>(nSamples), mean(mean), stdDev(stdDev) {};
+    NoiseGenerator(const float mean = 0.f, const float stdDev = 1.f) :
+                    IAudioSource<SampleType, BufferSize>(), mean(mean), stdDev(stdDev) {};
 
-    std::vector<SampleType> getSamples() override;
-    std::vector<SampleType> addNoise(std::vector<SampleType> signal);
+    void getSamples(std::array<SampleType, BufferSize>& buffer) override;
+    void addNoise(std::array<SampleType, BufferSize>& buffer);
 
 private:
     float mean;

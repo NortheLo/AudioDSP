@@ -13,6 +13,4 @@ void SimpleDSPProcessor<SampleType>::process(const SampleType* input, SampleType
 }
 
 template class SimpleDSPProcessor<float>;
-template class SimpleDSPProcessor<double>;
-template class SimpleDSPProcessor<uint16_t>;
 template class SimpleDSPProcessor<uint32_t>;

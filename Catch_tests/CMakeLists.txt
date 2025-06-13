@@ -1,6 +1,6 @@
 find_package(Catch2 3 REQUIRED)
 
-add_executable(Catch_tests_run add_test.cpp
+add_executable(Catch_tests_run
         sin_generator_test.cpp
         wav_reader_test.cpp
         ../src/NoiseGenerator.cpp

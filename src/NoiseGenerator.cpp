@@ -1,41 +1,34 @@
 //
 // Created by louis on 08/06/25.
 //
-#include <cstdint>
-#include <random>
-#include "NoiseGenerator.h"
-
 #include <iostream>
+#include <random>
 
-template<typename SampleType>
-std::vector<SampleType> NoiseGenerator<SampleType>::getSamples() {
-    std::vector<SampleType> noise(this->bufferSize);
+#include "NoiseGenerator.h"
+#include "SupportedFormats.h"
 
+template<typename SampleType, size_t BufferSize>
+void NoiseGenerator<SampleType, BufferSize>::getSamples(std::array<SampleType, BufferSize>& buffer) {
     std::default_random_engine engine(std::random_device{}());
     std::normal_distribution<SampleType> dist(mean, stdDev);
 
-    for (auto& sample : noise) {
+    for (auto& sample : buffer) {
         sample = dist(engine);
     }
-    return noise;
 }
 
-template <typename SampleType>
-std::vector<SampleType> NoiseGenerator<SampleType>::addNoise(std::vector<SampleType> signal) {
-    std::vector<SampleType> noise = getSamples();
-
-    if (signal.size() != this->bufferSize) {
-        std::cerr << "Mismatch of signal and noise vectors" << std::endl;
-        return signal;
-    }
+template <typename SampleType, size_t BufferSize>
+void NoiseGenerator<SampleType, BufferSize>::addNoise(std::array<SampleType, BufferSize>& buffer) {
+    std::array<SampleType, BufferSize> noise{};
+    getSamples(noise);
 
     size_t idx = 0;
     for (auto& sample : noise) {
-        signal[idx++] += sample;
+        buffer[idx++] += sample;
     }
-    return signal;
 }
 
 
-template class NoiseGenerator<float>;
-template class NoiseGenerator<double>;
+template class NoiseGenerator<float, BUFFERSIZE_64>;
+template class NoiseGenerator<float, BUFFERSIZE_128>;
+template class NoiseGenerator<float, BUFFERSIZE_256>;

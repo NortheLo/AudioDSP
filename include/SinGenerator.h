@@ -6,14 +6,14 @@
 
 #include "IAudioSource.h"
 
-template<typename SampleType>
+template<typename SampleType, size_t BufferSize>
 
-class SinGenerator : public IAudioSource<SampleType> {
+class SinGenerator : public IAudioSource<SampleType, BufferSize> {
 public:
-    SinGenerator(const SampleType amplitude, const float frequency, const size_t nSamples) :
-                _amplitude(amplitude), _frequency(frequency), IAudioSource<SampleType>(nSamples) { };
+    SinGenerator(const SampleType amplitude, const float frequency) :
+                _amplitude(amplitude), _frequency(frequency), IAudioSource<SampleType, BufferSize>() { };
 
-    std::vector<SampleType> getSamples() override;
+    void getSamples(std::array<SampleType, BufferSize>& buffer) override;
 
 private:
     SampleType _amplitude;
