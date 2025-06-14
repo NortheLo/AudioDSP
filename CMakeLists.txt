@@ -4,6 +4,8 @@ project(AudioDSP)
 include(cmake/imgui.cmake)
 include(cmake/implot.cmake)
 
+add_subdirectory(external/portaudio)
+
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 
@@ -26,10 +28,11 @@ add_library(core STATIC
         include/AudioEngineMono.h
         src/AudioEngineStereo.cpp
         include/AudioEngineStereo.h
+        include/PortAudioInput.h
 )
 
 # Make headers visible to anything linking to this library
-target_include_directories(core PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/external/imgui ${CMAKE_SOURCE_DIR}/external/implot)
+target_include_directories(core PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/external/imgui ${CMAKE_SOURCE_DIR}/external/implot, ${CMAKE_SOURCE_DIR}/external/portaudio)
 
 # Main executable
 add_executable(AudioDSP main.cpp
@@ -37,7 +40,7 @@ add_executable(AudioDSP main.cpp
                         src/NoiseGenerator.cpp
         src/SimpleDSPProcessor.cpp)
 
-target_link_libraries(AudioDSP PRIVATE core imgui implot glfw OpenGL::GL)
+target_link_libraries(AudioDSP PRIVATE core imgui implot glfw OpenGL::GL portaudio)
 
 # Add tests
 add_subdirectory(Catch_tests)

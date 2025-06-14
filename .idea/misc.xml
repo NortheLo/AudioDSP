@@ -9,6 +9,7 @@
       <file path="$PROJECT_DIR$/external/FakeIt" />
       <file path="$PROJECT_DIR$/external/imgui" />
       <file path="$PROJECT_DIR$/external/implot" />
+      <file path="$PROJECT_DIR$/external/portaudio" />
     </libraryRoots>
   </component>
 </project>
