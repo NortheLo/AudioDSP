@@ -19,4 +19,5 @@ Install catch2 via homebrew.
 - Seperate into Audio and Plot Thread 
 - Make portaudio input and output class
 - create fft dsp processor
+- stereo/complex data type
 - create GUI with input plot, output, select source/sink

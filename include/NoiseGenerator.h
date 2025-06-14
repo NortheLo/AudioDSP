@@ -13,6 +13,10 @@ public:
                     IAudioSource<SampleType, BufferSize>(), mean(mean), stdDev(stdDev) {};
 
     void getSamples(std::array<SampleType, BufferSize>& buffer) override;
+    void getSamples(std::array<SampleType, BufferSize>& bufferR, std::array<SampleType, BufferSize>& bufferL) override {
+        getSamples(bufferR);
+        getSamples(bufferL);
+    }
     void addNoise(std::array<SampleType, BufferSize>& buffer);
 
 private:

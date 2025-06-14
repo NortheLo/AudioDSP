@@ -18,10 +18,14 @@ add_library(core STATIC
         include/WavHeader.h
         include/NoiseGenerator.h
         src/NoiseGenerator.cpp
-        src/AudioEngine.cpp
         include/AudioEngine.h
         include/IDSPProcessor.h
         include/IAudioSink.h
+        include/IAudioEngine.h
+        src/AudioEngineMono.cpp
+        include/AudioEngineMono.h
+        src/AudioEngineStereo.cpp
+        include/AudioEngineStereo.h
 )
 
 # Make headers visible to anything linking to this library
@@ -31,10 +35,9 @@ target_include_directories(core PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURC
 add_executable(AudioDSP main.cpp
                         src/WavReader.cpp
                         src/NoiseGenerator.cpp
-                        src/AudioEngine.cpp
-                        src/SimpleDSPProcessor.cpp)
+        src/SimpleDSPProcessor.cpp)
 
-target_link_libraries(AudioDSP PRIVATE core  imgui implot glfw OpenGL::GL)
+target_link_libraries(AudioDSP PRIVATE core imgui implot glfw OpenGL::GL)
 
 # Add tests
 add_subdirectory(Catch_tests)

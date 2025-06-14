@@ -1,7 +1,7 @@
 //
 // Created by louis on 08/06/25.
 //
-#include <iostream>
+#include <complex>
 #include <random>
 
 #include "NoiseGenerator.h"
@@ -27,7 +27,6 @@ void NoiseGenerator<SampleType, BufferSize>::addNoise(std::array<SampleType, Buf
         buffer[idx++] += sample;
     }
 }
-
 
 template class NoiseGenerator<float, BUFFERSIZE_64>;
 template class NoiseGenerator<float, BUFFERSIZE_128>;

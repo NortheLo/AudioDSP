@@ -13,6 +13,10 @@ public:
     virtual ~IAudioSource() = default;
 
     virtual void getSamples(std::array<SampleType, BufferSize>& buffer) = 0;
+    virtual void getSamples(std::array<SampleType, BufferSize>& bufferR,
+                            std::array<SampleType, BufferSize>& bufferL) = 0;
+
+
 
     void setSampleRate(unsigned int rate) { sampleRate = rate; }
     size_t getBufferSize() { return BufferSize; }

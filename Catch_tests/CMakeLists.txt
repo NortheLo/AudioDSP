@@ -5,7 +5,6 @@ add_executable(Catch_tests_run
         wav_reader_test.cpp
         ../src/NoiseGenerator.cpp
         noise_generator_test.cpp
-        ../src/AudioEngine.cpp
         ../src/SimpleDSPProcessor.cpp
         audio_engine_test.cpp
         simple_plot_test.cpp

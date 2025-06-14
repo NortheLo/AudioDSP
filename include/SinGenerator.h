@@ -14,6 +14,10 @@ public:
                 _amplitude(amplitude), _frequency(frequency), IAudioSource<SampleType, BufferSize>() { };
 
     void getSamples(std::array<SampleType, BufferSize>& buffer) override;
+    void getSamples(std::array<SampleType, BufferSize>& bufferR, std::array<SampleType, BufferSize>& bufferL) override{
+        getSamples(bufferR);
+        getSamples(bufferL);
+    }
 
 private:
     SampleType _amplitude;

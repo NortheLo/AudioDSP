@@ -4,36 +4,26 @@
 
 #pragma once
 
-#include "vector"
-#include "memory"
+#include <memory>
 
-#include "IDSPProcessor.h"
-#include "IAudioSource.h"
-#include "IAudioSink.h"
+#include "SupportedFormats.h"
+#include "IAudioEngine.h"
+#include "AudioEngineMono.h"
+#include "AudioEngineStereo.h"
 
 template<typename SampleType, size_t BufferSize>
 class AudioEngine {
 public:
-    void setSource(std::shared_ptr<IAudioSource<SampleType, BufferSize>> source) {
-        source_ = source;
+    static std::unique_ptr<IAudioEngine<SampleType, BufferSize>>
+
+    create(BufferFormat type) {
+        switch (type) {
+        case BufferFormat::Mono:
+            return std::make_unique<AudioEngineMono<SampleType, BufferSize>>();
+        case BufferFormat::Stereo:
+            return std::make_unique<AudioEngineStereo<SampleType, BufferSize>>();
+        default:
+            return nullptr;
+        }
     }
-
-    void addProcessor(std::shared_ptr<IDSPProcessor<SampleType>> processor) {
-        processors_.push_back(processor);
-    }
-
-    void setSink(std::shared_ptr<IAudioSink<SampleType>> sink) {
-        sink_.push_back(sink);
-    }
-
-    void processNextBlock(SampleType* outputBuffer);
-
-
-private:
-    std::shared_ptr<IAudioSource<SampleType, BufferSize>> source_;
-    std::vector<std::shared_ptr<IDSPProcessor<SampleType>>> processors_;
-    std::vector<std::shared_ptr<IAudioSink<SampleType>>> sink_;
-
-    std::array<SampleType, BufferSize> frontBuffer;
-    std::array<SampleType, BufferSize> backBuffer;
 };

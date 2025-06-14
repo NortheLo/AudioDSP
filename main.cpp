@@ -39,16 +39,20 @@ int main() {
     ImGui_ImplOpenGL3_Init("#version 130");
 
     // Your audio code
-    AudioEngine<float, BUFFERSIZE_128> engine;
+    auto engine = AudioEngine<float, BUFFERSIZE_128>::create(BufferFormat::Mono);
+
+    auto engine_mono = dynamic_cast<AudioEngineMono<float, BUFFERSIZE_128>*>(engine.get());
     float ampl = 2.f;
     float freq = 440.f;
+
     auto sinGen = std::make_shared<SinGenerator<float, BUFFERSIZE_128>>(ampl, freq);
-    auto plot = std::make_shared<SimplePlot<float>>(BUFFERSIZE_128);
     auto proc = std::make_shared<SimpleDSPProcessor<float>>();
+    auto plot = std::make_shared<SimplePlot<float>>(BUFFERSIZE_128);
+
     std::array<float, BUFFERSIZE_128> res{};
-    engine.setSource(sinGen);
-    engine.setSink(plot);
-    engine.addProcessor(proc);
+    engine_mono->setSource(sinGen);
+    engine_mono->addProcessor(proc);
+    engine_mono->addSink(plot);
 
     // GUI loop
     while (!glfwWindowShouldClose(window)) {
@@ -60,7 +64,7 @@ int main() {
         ImGui::NewFrame();
 
         // Your processing and plotting
-        engine.processNextBlock(res.data());
+        engine_mono->processNextBlock(res.data());
         ImGui::Begin("Plot");
         plot->drawPlot();
         ImGui::End();
