@@ -6,9 +6,7 @@
 
 #include <vector>
 #include <mutex>
-#include <cstring>
 #include <atomic>
-#include <cassert>
 #include <iostream>
 
 #include <portaudio.h>

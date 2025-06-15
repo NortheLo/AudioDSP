@@ -1,6 +1,9 @@
 //
 // Created by louis on 15/06/25.
 //
+#include <cstring>
+#include <cassert>
+
 #include "PortAudioOutput.h"
 
 template<typename SampleType>
@@ -91,6 +94,4 @@ int PortAudioOutput<SampleType>::paCallback(const void* /*inputBuffer*/,
     return paContinue;
 }
 
-template class PortAudioOutput<float>;
-template class PortAudioOutput<float>;
 template class PortAudioOutput<float>;

@@ -30,7 +30,6 @@ add_library(core STATIC
         include/AudioEngineStereo.h
         include/PortAudioInput.h
         include/PortAudioOutput.h
-        src/PortAudioInput.cpp
         src/PortAudioOutput.cpp
 )
 
