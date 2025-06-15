@@ -29,6 +29,9 @@ add_library(core STATIC
         src/AudioEngineStereo.cpp
         include/AudioEngineStereo.h
         include/PortAudioInput.h
+        include/PortAudioOutput.h
+        src/PortAudioInput.cpp
+        src/PortAudioOutput.cpp
 )
 
 # Make headers visible to anything linking to this library
