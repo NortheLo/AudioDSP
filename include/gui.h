@@ -20,7 +20,8 @@
 template<typename SampleType, size_t BufferSize>
 class Gui {
     public:
-    Gui(std::shared_ptr<GuiBridgeSink<SampleType, BufferSize>> bridge) : bridgeSink_(std::move(bridge)){
+    Gui(std::shared_ptr<GuiBridgeSink<SampleType, BufferSize>> bridge,
+        std::shared_ptr<std::atomic<bool>> running) : bridgeSink_(std::move(bridge)), running_(std::move(running)) {
         init();
     }
     ~Gui() {
@@ -66,6 +67,7 @@ class Gui {
 
             glfwSwapBuffers(window_);
         }
+        *running_ = false;
     }
 
     private:
@@ -106,6 +108,7 @@ class Gui {
             glfwDestroyWindow(window_);
             glfwTerminate();
         }
+
     std::vector<std::shared_ptr<IGuiElement<SampleType>>> guiElements_;
     std::shared_ptr<GuiBridgeSink<SampleType, BufferSize>> bridgeSink_;
     GLFWwindow* window_ = nullptr;
@@ -113,4 +116,6 @@ class Gui {
     int width_ = 1280;
     int height_ = 720;
     std::string title_ = "Audio Plot";
+    std::shared_ptr<std::atomic<bool>> running_;
+
 };

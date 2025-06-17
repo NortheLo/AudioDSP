@@ -30,5 +30,5 @@ public:
 private:
     std::vector<SampleType> buffer_;
     std::mutex mutex_;
-    const size_t maxSize = 8192;
+    const size_t maxSize = 2 * 8192;
 };
