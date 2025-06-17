@@ -4,9 +4,9 @@
 
 #pragma once
 #include <array>
+#include <cstddef>
 
 template<typename SampleType, size_t BufferSize>
-
 class IAudioSource {
 public:
     IAudioSource() = default;

@@ -34,6 +34,10 @@ add_library(core STATIC
         include/GuiBridgeSink.h
         include/gui.h
         include/IGuiElement.h
+        include/Filter.h
+        src/Filter.cpp
+        include/PulseGenerator.h
+        src/PulseGenerator.cpp
 )
 
 # Make headers visible to anything linking to this library

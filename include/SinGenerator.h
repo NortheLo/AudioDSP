@@ -7,7 +7,6 @@
 #include "IAudioSource.h"
 
 template<typename SampleType, size_t BufferSize>
-
 class SinGenerator : public IAudioSource<SampleType, BufferSize> {
 public:
     SinGenerator(const SampleType amplitude, const float frequency) :

@@ -32,7 +32,6 @@ public:
     }
 
 private:
-    int sampleRate = 44100;
     PaStream* stream = nullptr;
     std::array<SampleType, BufferSize> internalBuffer;
     std::atomic<bool> running = true;
@@ -57,7 +56,7 @@ private:
 
         Pa_OpenStream(&stream,
                       &inputParams, nullptr,
-                      sampleRate, BufferSize,
+                      this->sampleRate, BufferSize,
                       paClipOff,
                       &PortAudioInput::paCallback,
                       this);
