@@ -31,6 +31,9 @@ add_library(core STATIC
         include/PortAudioInput.h
         include/PortAudioOutput.h
         src/PortAudioOutput.cpp
+        include/GuiBridgeSink.h
+        include/gui.h
+        include/IGuiElement.h
 )
 
 # Make headers visible to anything linking to this library

@@ -4,36 +4,25 @@
 
 #pragma once
 
-#include "IAudioSink.h"
-#include <vector>
+#include "IGuiElement.h"
 #include "implot.h"
+#include <vector>
 
 template<typename SampleType>
-class SimplePlot : public IAudioSink<SampleType> {
+class SimplePlot : public IGuiElement<SampleType> {
 public:
-    SimplePlot(size_t maxSamples = 1024)
-        : maxSamples_(maxSamples) {}
+    SimplePlot() { }
+    ~SimplePlot() override = default;
 
-    void update(const SampleType* data, size_t numSamples) override {
-        // Append new samples, truncate old ones
-        if (buffer_.size() + numSamples > maxSamples_) {
-            size_t excess = buffer_.size() + numSamples - maxSamples_;
-            buffer_.erase(buffer_.begin(), buffer_.begin() + excess);
-        }
-        buffer_.insert(buffer_.end(), data, data + numSamples);
-    }
+    void draw(const SampleType* data, size_t numSamples) override {
+        if (ImPlot::BeginPlot("Audio Signal")) {
+            std::vector<float> x(numSamples);
+            for (size_t i = 0; i < numSamples; ++i) {
+                x[i] = static_cast<float>(i);
+            }
 
-    void drawPlot(const char* label = "Audio Signal") {
-        if (ImPlot::BeginPlot(label)) {
-            std::vector<float> x(buffer_.size());
-            for (size_t i = 0; i < x.size(); ++i) x[i] = static_cast<float>(i);
-            ImPlot::PlotLine("Signal", x.data(), buffer_.data(), static_cast<int>(buffer_.size()));
+            ImPlot::PlotLine("Signal", x.data(), data, static_cast<int>(numSamples));
             ImPlot::EndPlot();
         }
     }
-
-private:
-    std::vector<SampleType> buffer_;
-    size_t maxSamples_;
 };
-

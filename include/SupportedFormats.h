@@ -4,9 +4,9 @@
 
 #pragma once
 
-#define BUFFERSIZE_64 64
-#define BUFFERSIZE_128 128
-#define BUFFERSIZE_256 256
+constexpr unsigned int BUFFERSIZE_64 = 64;
+constexpr unsigned int BUFFERSIZE_128 = 128;
+constexpr unsigned int BUFFERSIZE_256 = 256;
 
 enum class BufferFormat {
     Mono,
