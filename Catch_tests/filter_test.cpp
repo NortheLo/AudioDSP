@@ -16,7 +16,7 @@
 // max deviation from the reference MATLAB value
 constexpr float abs_dev = 1e-6;
 
-TEST_CASE("FIR Filter Test") {
+TEST_CASE("FIR_Filter_Test") {
     auto pulse = PulseGenerator<float, BUFFERSIZE_256>();
     std::array<float, BUFFERSIZE_256> pulse_buf;
     pulse.getSamples(pulse_buf);
@@ -40,7 +40,7 @@ TEST_CASE("FIR Filter Test") {
     REQUIRE( abs(res[4] - 0.0016) < abs_dev);
 }
 
-TEST_CASE("IIR Filter Test") {
+TEST_CASE("IIR_Filter_Test") {
     auto pulse = PulseGenerator<float, BUFFERSIZE_256>();
     std::array<float, BUFFERSIZE_256> pulse_buf;
     pulse.getSamples(pulse_buf);
