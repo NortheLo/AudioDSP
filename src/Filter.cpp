@@ -19,35 +19,35 @@ Filter<SampleType>::Filter(const std::vector<float> a, const std::vector<float> 
 template<typename SampleType>
 void Filter<SampleType>::process(const SampleType* input, SampleType* output, size_t numSamples) {
     for (size_t n = 0; n < numSamples; ++n) {
-        // Shift FIFO
+        // Shift in new input sample
         fifoR.pop_front();
         fifoR.push_back(input[n]);
 
-        SampleType y = 0.f;
+        SampleType y = 0.0f;
 
-        // Feedforward part (numerator)
+        // Feedforward (FIR) part
         for (size_t i = 0; i < numerator.size(); ++i) {
             y += numerator[i] * fifoR[fifoR.size() - 1 - i];
         }
 
-        // Feedback part (denominator)
-        for (size_t i = 1; i < denumerator.size(); i++) {
-            y -= denumerator[i] * outputHistR[i - i];
+        // Feedback (IIR) part
+        for (size_t i = 1; i < denumerator.size(); ++i) {
+            y -= denumerator[i] * outputHistR[outputHistR.size() - i];
         }
 
         output[n] = y;
+
+        // Update output history
         outputHistR.pop_front();
         outputHistR.push_back(y);
     }
 }
 
+
 template<typename SampleType>
 void Filter<SampleType>::process(const SampleType* inputR, const SampleType* inputL,
                                  SampleType* outputR, SampleType* outputL,
                                  size_t numSamples) {
-
-    const size_t N = numerator.size();
-    const size_t M = denumerator.size();
 
     for (size_t n = 0; n < numSamples; ++n) {
         // Shift input FIFOs
@@ -57,12 +57,12 @@ void Filter<SampleType>::process(const SampleType* inputR, const SampleType* inp
         SampleType yR = 0.f;
         SampleType yL = 0.f;
 
-        for (size_t i = 0; i < N; ++i) {
+        for (size_t i = 0; i < numerator.size(); ++i) {
             yR += numerator[i] * fifoR[fifoR.size() - 1 - i];
             yL += numerator[i] * fifoL[fifoL.size() - 1 - i];
         }
 
-        for (size_t i = 1; i < M; ++i) {
+        for (size_t i = 1; i < denumerator.size(); ++i) {
             yR -= denumerator[i] * outputHistR[outputHistR.size() - i];
             yL -= denumerator[i] * outputHistL[outputHistL.size() - i];
         }

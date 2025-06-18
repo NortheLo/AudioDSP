@@ -45,8 +45,8 @@ TEST_CASE("IIR_Filter_Test") {
     std::array<float, BUFFERSIZE_256> pulse_buf;
     pulse.getSamples(pulse_buf);
 
-    std::vector<float> a = {2, 3};
-    std::vector<float> b = {1, 0.2};
+    std::vector<float> a = {1, 0.2};
+    std::vector<float> b = {2, 3};
 
     auto filter = Filter<float>(a, b);
 
@@ -63,4 +63,39 @@ TEST_CASE("IIR_Filter_Test") {
      REQUIRE( abs(res[3] - 0.104) < abs_dev);
      REQUIRE( abs(res[4] - (-0.208)) < abs_dev);
      REQUIRE( abs(res[5] - (0.00416)) < abs_dev);
+}
+
+
+TEST_CASE("IIR_Stereo_Filter_Test") {
+    auto pulse = PulseGenerator<float, BUFFERSIZE_256>();
+    std::array<float, BUFFERSIZE_256> pulse_bufR;
+    pulse.getSamples(pulse_bufR);
+
+    auto pulse_bufL = pulse_bufR;
+
+    std::vector<float> a = {1, 0.2};
+    std::vector<float> b = {2, 3};
+
+    auto filter = Filter<float>(a, b);
+
+    std::array<float, BUFFERSIZE_256> resR;
+    std::array<float, BUFFERSIZE_256> resL;
+
+    filter.process(pulse_bufR.data(), pulse_bufL.data(), resR.data(), resL.data(), resR.size());
+
+    // ref values are from eval_wav_writer.m; index gere + 1 -> MATLAB indices start with 1
+    REQUIRE( resR.size() == BUFFERSIZE_256);
+    REQUIRE( resL.size() == BUFFERSIZE_256);
+
+
+    REQUIRE( abs(resR[0] - 2.f) < abs_dev);
+    REQUIRE( abs(resR[1] - 2.6) < abs_dev);
+    REQUIRE( abs(resR[2] - (-0.52)) < abs_dev);
+    REQUIRE( abs(resR[3] - 0.104) < abs_dev);
+    REQUIRE( abs(resR[4] - (-0.208)) < abs_dev);
+    REQUIRE( abs(resR[5] - (0.00416)) < abs_dev);
+
+    for (size_t i = 0; i < resR.size(); ++i) {
+        REQUIRE( abs(resR[i] - resL[i]) < abs_dev);
+    }
 }
