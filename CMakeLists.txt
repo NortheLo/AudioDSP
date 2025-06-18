@@ -38,6 +38,8 @@ add_library(core STATIC
         src/Filter.cpp
         include/PulseGenerator.h
         src/PulseGenerator.cpp
+        include/BlackmanHarrisWindow.h
+        src/BlackmanHarrisWindow.cpp
 )
 
 # Make headers visible to anything linking to this library

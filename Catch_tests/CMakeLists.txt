@@ -10,6 +10,7 @@ add_executable(Catch_tests_run
         simple_plot_test.cpp
         filter_test.cpp
         pulse_gen_test.cpp
+        bh_windowing_test.cpp
 )
 
 target_link_libraries(Catch_tests_run PRIVATE Catch2::Catch2WithMain core)
