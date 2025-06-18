@@ -12,6 +12,7 @@
 #include "Filter.h"
 #include "SupportedFormats.h"
 #include "PulseGenerator.h"
+#include "Data/ref_iir.h"
 
 // max deviation from the reference MATLAB value
 constexpr float abs_dev = 1e-6;
@@ -57,12 +58,9 @@ TEST_CASE("IIR_Filter_Test") {
      // ref values are from eval_wav_writer.m; index gere + 1 -> MATLAB indices start with 1
      REQUIRE( res.size() == BUFFERSIZE_256);
 
-     REQUIRE( abs(res[0] - 2.f) < abs_dev);
-     REQUIRE( abs(res[1] - 2.6) < abs_dev);
-     REQUIRE( abs(res[2] - (-0.52)) < abs_dev);
-     REQUIRE( abs(res[3] - 0.104) < abs_dev);
-     REQUIRE( abs(res[4] - (-0.208)) < abs_dev);
-     REQUIRE( abs(res[5] - (0.00416)) < abs_dev);
+    for (auto i = 0; i < BUFFERSIZE_256; i++) {
+        REQUIRE(Catch::Approx(res[i]).margin(1e-6) == ref_ir_iir[i] );
+    }
 }
 
 
