@@ -3,9 +3,10 @@
 With this framework I want to be able to test different Audio DSP algorithms in C++ and port them fast to an embedded platform. <br>
 Therefore I am using C++.<br>
 To achieve this, this Framework needs:
-- Selection of audio sources like impulse, sin, mic-input, noise source (AWGN),...
+- Selection of audio sources like impulse, sin, mic-input, noise source (AWGN), audio codecs...
 - Pipeline which makes it easy to modify processing steps aswell as in-/output modules
-- Tool to visualize the signal like spectrum, spectrograms, etc (this could possibly be done in MATLAB/Python)
+- Visualize the signal like spectrum, spectrograms, etc. in real-time
+- easy to port on any Linux/UNIX platform
 
 ## Installation
 ### Dependencies on Fedora
@@ -14,10 +15,11 @@ On Fedora install Catch2 with ``sudo dnf install catch2-devel``
 ### Dependencies on macOS
 Install catch2 via homebrew.
 
+### Build
+CMake
+
 ## To-Do
-- Abstract GLFW stuff into one handler
-- Seperate into Audio and Plot Thread 
-- Make portaudio input and output class
 - create fft dsp processor
+- test PortAudio in-/output class
 - complex support
-- create GUI with input plot, output, select source/sink
+- add more GUI elemts with to observe phase, bode plot, cutoff freqs etc
